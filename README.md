@@ -1,16 +1,27 @@
-# image_recognition_app
+# Image regocnition app
 
-Image recognition app using Azure
+## About
 
-## Getting Started
+This project was made by Johannes Rantapää for WHMP course as the final task.
 
-This project is a starting point for a Flutter application.
+This project uses Microsoft Azure computer vision AI service to analyze images and show the user what the AI detected from the image.
 
-A few resources to get you started if this is your first Flutter project:
+The app has a couple different pages; An "about-page" that has a bit of information about the app and "previous results-page" that shows your previous images and the results.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## How to run locally
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repository with `git clone https://github.com/Necromunda/ImageRecognitionApp.git`
+
+2. Make an Azure Computer Vision resource at https://azure.microsoft.com/en-us/free/cognitive-services/
+
+3. Create `.env` file in project root, same level as `pubspec.yaml`
+
+4. Add these to the `.env` file:
+```
+ENDPOINT=YOUR_ENDPOINT_FROM_YOUR_COMPUTER_VISION_RESOURCE e.g https://<your_resource_name>.cognitiveservices.azure.com/
+KEY=YOUR_KEY_FROM_YOUR_COMPUTER_VISION_RESOURCE
+```
+
+5. Build the app with `flutter build apk`. The apk goes to ./build/app/outputs/flutter-apk/app-release.apk 
+
+6. Connect your phone with usb-cable to your pc and install the app to your phone using adb with `adb install PATH\TO\APP.APK` (You have to enable developer settings in your phone, tap the build number 7 times)
