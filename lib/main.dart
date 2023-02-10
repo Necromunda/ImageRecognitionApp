@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 // import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -42,9 +43,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Image recognition',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
+      theme: ThemeData(primarySwatch: Colors.indigo, fontFamily: 'Quicksand'),
       home: MyHomePage(
         title: 'Image recognition app',
         camera: camera,
@@ -92,7 +91,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _analyseImg(XFile file) async {
-    final uri = Uri.parse("${dotenv.env['ENDPOINT']}vision/v3.2/analyze?visualFeatures=Tags");
+    final uri = Uri.parse(
+        "${dotenv.env['ENDPOINT']}vision/v3.2/analyze?visualFeatures=Tags");
     final headers = {
       'Content-Type': 'application/octet-stream',
       'Ocp-Apim-Subscription-Key': dotenv.env['KEY'].toString(),
@@ -116,19 +116,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
       final image = await _controller.takePicture();
 
-      final Map<String, dynamic> response = jsonDecode(await _analyseImg(image));
+      final Map<String, dynamic> response =
+          jsonDecode(await _analyseImg(image));
+
       Result result = Result(imgPath: image.path, resultMap: response['tags']);
-      setState(() {
-        results.add(result);
-      });
-      print('${results.length} $results');
+
+      results.add(result);
 
       if (!mounted) return;
 
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => DisplayResult(
-            imagePath: image.path,
+            // imagePath: image.path,
             result: result,
           ),
         ),
@@ -144,17 +144,21 @@ class _MyHomePageState extends State<MyHomePage> {
       title: Text(widget.title),
     );
 
+    final height = MediaQuery.of(context).size.height;
+    final appBarHeight = appBar.preferredSize.height;
+
     return Scaffold(
       appBar: appBar,
-      drawer: AppDrawer(previousResults: results,),
+      drawer: AppDrawer(
+        previousResults: results,
+      ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Container(
-              margin: EdgeInsets.all(10),
-              height: MediaQuery.of(context).size.height -
-                  appBar.preferredSize.height,
+              margin: const EdgeInsets.all(10),
+              height: height - appBarHeight,
               child: CameraPreview(_controller),
             );
           } else {

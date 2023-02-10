@@ -1,68 +1,83 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:expandable/expandable.dart';
+import 'dart:io';
 
 import '../models/result.dart';
 
-class PreviousResults extends StatefulWidget {
-  const PreviousResults({Key? key, required this.previousResults}) : super(key: key);
+class PreviousResults extends StatelessWidget {
+  const PreviousResults({Key? key, required this.previousResults})
+      : super(key: key);
 
-  final List<Result>? previousResults;
-
-  @override
-  State<PreviousResults> createState() => _PreviousResultsState();
-}
-
-class _PreviousResultsState extends State<PreviousResults> {
+  final List<Result> previousResults;
 
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      title: Text('Previous results'),
+      title: const Text('Previous results'),
     );
 
     return Scaffold(
       appBar: appBar,
-      body: Container(
-        margin: EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Number of previous results ${widget.previousResults?.length}",
-              style: TextStyle(fontSize: 20,),
+      body: (previousResults.isEmpty || previousResults.length == 0)
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    "No results yet.",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    "Try taking a picture of something.",
+                    style: TextStyle(fontSize: 18),
+                  )
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemBuilder: (context, index) {
+                return Card(
+                    child: ExpandablePanel(
+                      header: Center(
+                        child: Text(
+                          "Result ${index + 1}",
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      collapsed: const Center(
+                        child: Text(
+                          "Expand to show results",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      expanded: Column(
+                        children: [
+                          Center(
+                            child: Card(
+                              child: Image.file(
+                                File(previousResults[index].imgPath),
+                              ),
+                            ),
+                          ),
+                          ...previousResults[index].resultMap.map(
+                                (e) => ListTile(
+                                  title: Text('Tag: ${e["name"].toString()}'),
+                                  subtitle: Text(
+                                      'Confidence: ${((e["confidence"] as double) * 100).toStringAsFixed(2)} %'),
+                                ),
+                              ),
+                        ],
+                      ),
+                    ),
+                  );
+              },
+              itemCount: previousResults.length,
             ),
-          ],
-        ),
-      ),
     );
   }
 }
-
-
-// class PreviousResults extends StatelessWidget {
-//   const PreviousResults({Key? key, required this.previousResults}) : super(key: key);
-//
-//   final List<Result>? previousResults;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final appBar = AppBar(
-//       title: Text('Previous results'),
-//     );
-//
-//     return Scaffold(
-//       appBar: appBar,
-//       body: Container(
-//         margin: EdgeInsets.all(10),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Text(
-//               "Number of previous results ${previousResults?.length}",
-//               style: TextStyle(fontSize: 20,),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

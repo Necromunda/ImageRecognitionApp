@@ -4,44 +4,45 @@ import 'dart:io';
 import '../models/result.dart';
 
 class DisplayResult extends StatelessWidget {
-  const DisplayResult(
-      {Key? key, required this.imagePath, required this.result})
-      : super(key: key);
+  // const DisplayResult({Key? key, required this.imagePath, required this.result})
+  const DisplayResult({Key? key, required this.result}) : super(key: key);
 
-  final String imagePath;
+  // final String imagePath;
   final Result result;
 
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      title: Text('Image recognition'),
+      title: const Text('Results'),
     );
-    final mediaQuery = MediaQuery.of(context);
+    final height = MediaQuery.of(context).size.height;
+    final appBarHeight = appBar.preferredSize.height;
 
     return Scaffold(
       appBar: appBar,
-      body: Center(
+      body: Card(
         child: Column(
           children: [
-            Container(
-              height: (mediaQuery.size.height * 0.5) - appBar.preferredSize.height,
-              width: double.infinity,
-              child: Card(
-                // margin: EdgeInsets.all(10),
-                child: Image.file(File(imagePath)),
+            Center(
+              child: Container(
+                height: (height * 0.5) - appBarHeight,
+                child: Image.file(
+                  File(result.imgPath),
+                ),
               ),
             ),
+            const SizedBox(height: 20),
             SingleChildScrollView(
               child: Container(
-                height: (mediaQuery.size.height * 0.5) - appBar.preferredSize.height,
+                height: (height * 0.5) - appBarHeight,
                 child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        title: Text('Tag: ${result.resultMap[index]["name"].toString()}'),
-                        subtitle: Text('Confidence: ${((result.resultMap[index]["confidence"] as double) * 100).toStringAsFixed(2)} %'),
-                      ),
+                    return ListTile(
+                      title: Text(
+                          'Tag: ${result.resultMap[index]["name"].toString()}'),
+                      subtitle: Text(
+                          'Confidence: ${((result.resultMap[index]["confidence"] as double) * 100).toStringAsFixed(2)} %'),
                     );
                   },
                   itemCount: result.resultMap.length,
