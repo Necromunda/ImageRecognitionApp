@@ -157,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Container(
-              margin: const EdgeInsets.all(10),
+              // margin: const EdgeInsets.all(10),
               height: height - appBarHeight,
               child: CameraPreview(_controller),
             );

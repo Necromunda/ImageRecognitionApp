@@ -22,6 +22,6 @@ ENDPOINT=YOUR_ENDPOINT_FROM_YOUR_COMPUTER_VISION_RESOURCE e.g https://<your_reso
 KEY=YOUR_KEY_FROM_YOUR_COMPUTER_VISION_RESOURCE
 ```
 
-5. Build the app with `flutter build apk`. The apk goes to ./build/app/outputs/flutter-apk/app-release.apk 
+5. Build the app with `flutter build apk`. The apk goes to \build\app\outputs\flutter-apk\app-release.apk 
 
-6. Connect your phone with usb-cable to your pc and install the app to your phone using adb with `adb install PATH\TO\APP.APK` (You have to enable developer settings in your phone, tap the build number 7 times)
+6. Connect your phone with usb-cable to your pc and install the app to your phone using adb with `adb -s <device-id> install PATH\TO\app-release.apk` (You have to enable developer settings in your phone, tap the build number 7 times)
